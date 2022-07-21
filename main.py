@@ -36,7 +36,7 @@ def get_users():
     try:
         return users
     except:
-        return return {"status": "ERROR" , "message" : "Something Went Wrong"}
+        return {"status": "ERROR" , "message" : "Something Went Wrong"}
 
 @app.get("/users/{p_username}")
 def get_one_user(p_username: str):
