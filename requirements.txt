@@ -45,7 +45,6 @@ fonttools==4.33.3
 form==0.0.1
 freetype-py==2.2.0
 Genshi==0.7.5
-greenlet==1.0.0
 gunicorn==20.0.4
 h11==0.12.0
 html5lib==1.1
@@ -59,18 +58,11 @@ jedi==0.18.1
 Jinja2==3.1.2
 joblib==1.1.0
 jsonschema==4.5.1
-jupyter==1.0.0
-jupyter-client==7.3.1
-jupyter-console==6.4.3
-jupyter-core==4.10.0
-jupyterlab-pygments==0.2.2
-jupyterlab-widgets==1.1.0
 keyring==21.8.0
 kiwisolver==1.4.2
 libusb==1.0.23b7
 lockfile==0.12.2
 lxml==4.6.3
-MarkupSafe==2.1.1
 mistune==0.8.4
 msgpack==1.0.3
 multipart==0.2.4
