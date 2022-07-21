@@ -1,8 +1,25 @@
 from fastapi import FastAPI, Path
 from typing import Optional
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.responses import RedirectResponse
+from sqlalchemy import text
+from starlette.responses import FileResponse
+from datetime import date, datetime, timedelta
 
-app = FastAPI()
+app = FastAPI(
+	title="Binar Kelompok 3 API",
+	description="Challenge Chapter 7",
+	version="0.0.1",
+)
+
+app.add_middleware(
+	CORSMiddleware,
+	allow_origins=["*"],
+	allow_methods=["*"],
+	allow_headers=["*"],
+	allow_credentials=True,
+)
 
 users = {
     1: {
@@ -27,9 +44,16 @@ class UpdateUsers(BaseModel):
     nama: Optional[str] = None
     email: Optional[str] = None
 
-@app.get("/")
-def index():
-    return {"message": "Hello Binar"}
+# Dependency
+@app.get("/" ,include_in_schema=False)
+def main():
+	# raise HTTPException(status_code=404, detail="User not found")
+	return RedirectResponse(url="/docs/")
+
+
+# @app.get("/")
+# def index():
+#     return {"message": "Hello Binar"}
 
 @app.get("/users")
 def get_users():
@@ -61,37 +85,39 @@ def create_users(p_username: str, user: Users):
 
 @app.post("/create_users_2/{p_user_id}")
 def create_users(p_user_id: int, user: Users):
+    
     try:
         if p_user_id in users:
             return {"status": "ERROR" , "message" : "Failed To Create Username Exists"}
         users[p_user_id] = user
-        return {"status": "SUCCESS" , "message" : user[p_user_id]}
+        return {"status": "SUCCESS" , "message" : users[p_user_id]}
     except:
         return {"status": "ERROR" , "message" : "Something Went Wrong"}
 
 @app.put("/update_users/{p_user_id}")
 def update_users(p_user_id: int , user: UpdateUsers):
+    
     try:
         if p_user_id not in users:
             return {"status": "ERROR" , "message" : "Username Does Not Exists"}
-        
+    
         if user.username != None:
-            users[p_user_id].username = user.username
+            users[p_user_id]["username"] = user.username
         else:
             return {"status": "ERROR" , "message" : "Username Is Blank"}
         
         if user.password != None:
-            users[p_user_id].password = user.password
+            users[p_user_id]["password"]  = user.password
         else:
             return {"status": "ERROR" , "message" : "Password Is Blank"}
         
         if user.nama != None:
-            users[p_user_id].nama = user.nama
+            users[p_user_id]["nama"]  = user.nama
         else:
             return {"status": "ERROR" , "message" : "Nama Is Blank"}
         
         if user.email != None:
-            users[p_user_id].email = user.email
+            users[p_user_id]["email"]  = user.email
         else:
             return {"status": "ERROR" , "message" : "Email Is Blank"}
         
