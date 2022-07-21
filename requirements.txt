@@ -163,6 +163,3 @@ uvicorn==0.13.4
 virtualenv==20.4.3
 wcwidth==0.2.5
 webencodings==0.5.1
-widgetsnbextension==3.6.0
-wrapt==1.13.3
-zebra==0.1.0
