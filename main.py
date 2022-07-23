@@ -22,6 +22,8 @@ from datetime import date, datetime, timedelta
 ###MODELS###
 from models.auth.auth_models import *
 from models.auth.auth_models import Base
+from models.master.items_models import *
+from models.master.items_models import Base
 
 ###SCHEMAS###
 from schemas.auth.auth_schemas import *
@@ -29,6 +31,7 @@ from schemas.auth.auth_schemas import BaseModel
 
 ###CRUD###
 from controllers.auth.auth_crud import *
+from controllers.master.items_crud import *
 # from controllers.transaction.test_crud import *
 
 
@@ -145,11 +148,15 @@ async def ins_user(p_username:str,p_password:str,p_nama:str,p_email:str,db: Sess
 
 		cek_user = AuthCrud.cek_user(p_username,db)
 		if(cek_user is None):
-			ins_user = AuthCrud.ins_user(p_username,p_password,p_nama,p_email,db)
-			if (ins_user == 'SUCCESS'):
-				return {'status': 'SUCCESS', 'data': 'Insert Success'}
+			cek_email = AuthCrud.cek_email(p_email,db)
+			if(cek_email is None):
+				ins_user = AuthCrud.ins_user(p_username,p_password,p_nama,p_email,db)
+				if (ins_user == 'SUCCESS'):
+					return {'status': 'SUCCESS', 'data': 'Insert Success'}
+				else:
+					return {'status': 'ERROR', 'data': 'Failed to Insert Users'}
 			else:
-				return {'status': 'ERROR', 'data': 'Failed to Insert Users'}
+				return {'status': 'ERROR', 'data': 'Failed to Insert Users , Email Already Exist'}
 		else:
 			return {'status': 'ERROR', 'data': 'Failed To Insert , Username Already Exist'}
 	except:
@@ -212,6 +219,52 @@ async def delete_user(p_username:str,db: Session = Depends(Connection.get_db)):
 			return {'status': 'ERROR', 'data': 'Failed To Delete , Username Not Exist'}
 	except:
 		return {'status': 'ERROR', 'data': 'Something Went Wrong With Delete User'}
+
+@app.get("/list_items", tags=["Master_Items"])
+async def list_items(db: Session = Depends(Connection.get_db)):
+
+	try:
+		if db is None:
+			raise HTTPException(status_code=404, detail="Connection Failed")
+		get_list_items = ItemsCrud.get_list_items(db)
+		if len(get_list_items) > 0 :
+			return {'status': 'SUCCESS', 'data': get_list_items}
+		else:
+			return {'status': 'ERROR', 'data': 'Get List Items Not Found'}	
+	except:
+		return {'status': 'ERROR', 'data': 'Something Went Wrong'}
+
+@app.get("/items/{p_item_code}", tags=["Master_Items"])
+async def item_detail(p_item_code:str,db: Session = Depends(Connection.get_db)):
+
+	try:
+		if db is None:
+			raise HTTPException(status_code=404, detail="Connection Failed")
+		get_item_detail = ItemsCrud.get_item_detail(p_item_code,db)
+		if (get_item_detail is not None):
+			return {'status': 'SUCCESS', 'data': get_item_detail}
+		else:
+			return {'status': 'ERROR', 'data': 'Get Items Not Found'}	
+	except:
+		return {'status': 'ERROR', 'data': 'Something Went Wrong'}
+
+@app.post("/item/ins/{p_item_code}/{p_item_name}/{p_item_desc}/{p_item_price}/{p_item_stock}/{p_item_images1}/{p_item_images2}/{p_item_images3}/{status}", tags=["Master_Items"])
+async def ins_item_detail(p_item_code:str,p_item_name:str,p_item_desc:str,p_item_price:int,p_item_stock:int,p_item_images1:str,p_item_images2:str,p_item_images3:str,p_status:int,db: Session = Depends(Connection.get_db)):
+
+	try:
+		if db is None:
+			raise HTTPException(status_code=404, detail="Connection Failed")
+		ins_item_detail = ItemsCrud.ins_item_detail(p_item_code,p_item_name,p_item_desc,p_item_price,p_item_stock,p_item_images1,p_item_images2,p_item_images3,status,db)
+		if (ins_item_detail == 'SUCCESS'):
+			return {'status': 'SUCCESS', 'data': 'Insert Item Detail Success'}
+		else:
+			return {'status': 'ERROR', 'data': 'Insert Items Detail Not Found'}	
+	except:
+		return {'status': 'ERROR', 'data': 'Something Went Wrong'}
+
+ins_item_detail
+
+#######################################################################  TRANSACTION  ###############################################################################
 
 
 ########### PO ############################

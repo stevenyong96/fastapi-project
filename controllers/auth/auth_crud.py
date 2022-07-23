@@ -124,6 +124,16 @@ class AuthCrud():
 		result = db.execute(sql)
 
 		return result.fetchone()
+
+	def cek_email(p_email:str , db : Session):
+		query = """SELECT
+		email 
+		FROM users
+		WHERE lower(email) = lower('{0}')
+		LIMIT 1""".format(p_email)
+		sql = text(query)
+		result = db.execute(sql)
+		return result.fetchone()
 		
 	
 	def ins_user(p_username:str,p_password:str,p_nama:str,p_email:str,db: Session):
