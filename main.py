@@ -109,7 +109,7 @@ def main(db: Session = Depends(Connection.get_db)):
 # 	return current_user
 
 
-@app.get("/login/{p_username}/{p_password}", tags=["Auth"])
+@app.post("/login/{p_username}/{p_password}", tags=["Auth"])
 async def login(p_username:str, p_password:str,db: Session = Depends(Connection.get_db)):
 	try:
 		if db is None:
@@ -262,7 +262,6 @@ async def ins_item_detail(p_item_code:str,p_item_name:str,p_item_desc:str,p_item
 	except:
 		return {'status': 'ERROR', 'data': 'Something Went Wrong'}
 
-ins_item_detail
 
 #######################################################################  TRANSACTION  ###############################################################################
 
