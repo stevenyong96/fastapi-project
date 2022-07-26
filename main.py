@@ -109,7 +109,7 @@ def main(db: Session = Depends(Connection.get_db)):
 # 	return current_user
 
 
-@app.get("/login/{p_username}/{p_password}", tags=["Auth"])
+@app.post("/login/{p_username}/{p_password}", tags=["Auth"])
 async def login(p_username:str, p_password:str,db: Session = Depends(Connection.get_db)):
 	try:
 		if db is None:
