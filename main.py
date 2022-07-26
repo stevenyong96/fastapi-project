@@ -264,7 +264,7 @@ async def ins_item_detail(item : Items,db: Session = Depends(Connection.get_db))
 	# try:
 	# 	if db is None:
 	# 		raise HTTPException(status_code=404, detail="Connection Failed")
-	# 	ins_item_detail = ItemsCrud.ins_item_detail(p_item_code,p_item_name,p_item_desc,p_item_price,p_item_stock,p_item_color,p_item_images1,p_item_images2,p_item_images3,status,db)
+	# 	ins_item_detail = ItemsCrud.ins_item_detail(item.item_code,item.item_name,item.item_desc,item.item_price,item.item_stock,item.item_color,item.item_images1,item.item_images2,item.item_images3,item.status,db)
 	# 	if (ins_item_detail == 'SUCCESS'):
 	# 		return {'status': 'SUCCESS', 'data': 'Insert Item Detail Success'}
 	# 	else:

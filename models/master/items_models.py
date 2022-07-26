@@ -5,7 +5,7 @@ from sqlalchemy.types import Date
 from config.database import Base
 
 class Item(Base):
-	__tablename__ = "items"
+	__tablename__ = "master_items"
 	item_code = Column(String, primary_key=True)
 	item_name = Column(String)
 	item_desc = Column(String)
