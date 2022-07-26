@@ -32,6 +32,7 @@ class ItemsCrud():
 		item_desc,
 		item_price,
 		item_stock,
+		item_color,
 		item_images1,
 		item_images2,
 		item_images3,
@@ -51,6 +52,7 @@ class ItemsCrud():
 		item_desc,
 		item_price,
 		item_stock,
+		item_color,
 		item_images1,
 		item_images2,
 		item_images3,
@@ -63,10 +65,78 @@ class ItemsCrud():
 		sql = text(query)
 		result = db.execute(sql)
 		return result.fetchone()
+	
+	def get_item_search(p_search: str, db: Session):
+		query = """
+		SELECT
+		res.item_code,
+		res.item_name,
+		res.item_desc,
+		res.item_price,
+		res.item_stock,
+		res.item_color,
+		res.item_images1,
+		res.item_images2,
+		res.item_images3,
+		res.status
+			FROM (
+		SELECT 
+		item_code,
+		item_name,
+		item_desc,
+		item_price,
+		item_stock,
+		item_color,
+		item_images1,
+		item_images2,
+		item_images3,
+		status
+		from master_items
+		WHERE 
+		lower(item_name) LIKE lower('%{0}%')
+		and status = 1
+		union 
+		SELECT 
+		item_code,
+		item_name,
+		item_desc,
+		item_price,
+		item_stock,
+		item_color,
+		item_images1,
+		item_images2,
+		item_images3,
+		status
+		from master_items
+		WHERE 
+		lower(item_code) LIKE lower('%{0}%')
+		and status = 1
+		union
+		SELECT 
+		item_code,
+		item_name,
+		item_desc,
+		item_price,
+		item_stock,
+		item_color,
+		item_images1,
+		item_images2,
+		item_images3,
+		status
+		from master_items
+		WHERE 
+		lower(item_desc) LIKE lower('%{0}%')
+		and status = 1
+		) as res
+		LIMIT 100
+		""".format(p_search)
+		sql = text(query)
+		result = db.execute(sql)
+		return result.fetchall()
 
 	def ins_item_detail(p_item_code: str,p_item_name:str,p_item_desc:str,p_item_price:int,p_item_stock:int,p_item_color:str,p_item_images1:str,p_item_images2:str,p_item_images3:str,status:int, db: Session):
 		query = """
-		INSERT INTO master_items(item_code,item_name,item_desc,item_price,item_stock,item_color,item_images,item_images2,item_images3,status)
+		INSERT INTO master_items(item_code,item_name,item_desc,item_price,item_stock,item_color,item_images1,item_images2,item_images3,status)
         VALUES('{0}','{1}','{2}',{3},{4},'{5}','{6}','{7}','{8}',{9})
 		""".format(p_item_code,p_item_name,p_item_desc,p_item_price,p_item_stock,p_item_color,p_item_images1,p_item_images2,p_item_images3,status)
 		sql = text(query)

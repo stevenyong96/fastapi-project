@@ -250,27 +250,41 @@ async def item_detail(p_item_code:str,db: Session = Depends(Connection.get_db)):
 	except:
 		return {'status': 'ERROR', 'data': 'Something Went Wrong'}
 
-@app.post("/item/ins/", tags=["Master_Items"])
-async def ins_item_detail(item : Items,db: Session = Depends(Connection.get_db)):
+@app.get("/items/search/{p_search}", tags=["Master_Items"])
+async def item_search(p_search:str,db: Session = Depends(Connection.get_db)):
 
 	if db is None:
 		raise HTTPException(status_code=404, detail="Connection Failed")
-	ins_item_detail = ItemsCrud.ins_item_detail(item.item_code,item.item_name,item.item_desc,item.item_price,item.item_stock,item.item_color,item.item_images1,item.item_images2,item.item_images3,item.status,db)
-	if (ins_item_detail == 'SUCCESS'):
-		return {'status': 'SUCCESS', 'data': 'Insert Item Detail Success'}
+	get_item_search = ItemsCrud.get_item_search(p_search,db)
+	if len(get_item_search) > 0:
+		return {'status': 'SUCCESS', 'data': get_item_search}
 	else:
-		return {'status': 'ERROR', 'data': 'Insert Items Detail Not Found'}	
+		return {'status': 'ERROR', 'data': 'Get Items Search Not Found'}	
 
 	# try:
 	# 	if db is None:
 	# 		raise HTTPException(status_code=404, detail="Connection Failed")
-	# 	ins_item_detail = ItemsCrud.ins_item_detail(item.item_code,item.item_name,item.item_desc,item.item_price,item.item_stock,item.item_color,item.item_images1,item.item_images2,item.item_images3,item.status,db)
-	# 	if (ins_item_detail == 'SUCCESS'):
-	# 		return {'status': 'SUCCESS', 'data': 'Insert Item Detail Success'}
+	# 	get_item_search = ItemsCrud.get_item_search(p_search,db)
+	# 	if len(get_item_search) > 0:
+	# 		return {'status': 'SUCCESS', 'data': get_item_search}
 	# 	else:
-	# 		return {'status': 'ERROR', 'data': 'Insert Items Detail Not Found'}	
+	# 		return {'status': 'ERROR', 'data': 'Get Items Search Not Found'}	
 	# except:
 	# 	return {'status': 'ERROR', 'data': 'Something Went Wrong'}
+
+@app.post("/item/ins/", tags=["Master_Items"])
+async def ins_item_detail(item : Items,db: Session = Depends(Connection.get_db)):
+
+	try:
+		if db is None:
+			raise HTTPException(status_code=404, detail="Connection Failed")
+		ins_item_detail = ItemsCrud.ins_item_detail(item.item_code,item.item_name,item.item_desc,item.item_price,item.item_stock,item.item_color,item.item_images1,item.item_images2,item.item_images3,item.status,db)
+		if (ins_item_detail == 'SUCCESS'):
+			return {'status': 'SUCCESS', 'data': 'Insert Item Detail Success'}
+		else:
+			return {'status': 'ERROR', 'data': 'Insert Items Detail Not Found'}	
+	except:
+		return {'status': 'ERROR', 'data': 'Something Went Wrong'}
 
 
 #######################################################################  TRANSACTION  ###############################################################################
