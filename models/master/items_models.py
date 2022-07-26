@@ -11,6 +11,7 @@ class Item(Base):
 	item_desc = Column(String)
 	item_price = Column(Numeric)
 	item_stock = Column(Numeric,default=0)
+	item_color = Column(String)
 	item_images1 = Column(String)
 	item_images2 = Column(String)
 	item_images3 = Column(String)

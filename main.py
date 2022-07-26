@@ -248,13 +248,13 @@ async def item_detail(p_item_code:str,db: Session = Depends(Connection.get_db)):
 	except:
 		return {'status': 'ERROR', 'data': 'Something Went Wrong'}
 
-@app.post("/item/ins/{p_item_code}/{p_item_name}/{p_item_desc}/{p_item_price}/{p_item_stock}/{p_item_images1}/{p_item_images2}/{p_item_images3}/{status}", tags=["Master_Items"])
-async def ins_item_detail(p_item_code:str,p_item_name:str,p_item_desc:str,p_item_price:int,p_item_stock:int,p_item_images1:str,p_item_images2:str,p_item_images3:str,p_status:int,db: Session = Depends(Connection.get_db)):
+@app.post("/item/ins/{p_item_code}/{p_item_name}/{p_item_desc}/{p_item_price}/{p_item_stock}/{p_item_color}/{p_item_images1}/{p_item_images2}/{p_item_images3}/{status}", tags=["Master_Items"])
+async def ins_item_detail(p_item_code:str,p_item_name:str,p_item_desc:str,p_item_price:int,p_item_stock:int,p_item_color:str,p_item_images1:str,p_item_images2:str,p_item_images3:str,p_status:int,db: Session = Depends(Connection.get_db)):
 
 	try:
 		if db is None:
 			raise HTTPException(status_code=404, detail="Connection Failed")
-		ins_item_detail = ItemsCrud.ins_item_detail(p_item_code,p_item_name,p_item_desc,p_item_price,p_item_stock,p_item_images1,p_item_images2,p_item_images3,status,db)
+		ins_item_detail = ItemsCrud.ins_item_detail(p_item_code,p_item_name,p_item_desc,p_item_price,p_item_stock,p_item_color,p_item_images1,p_item_images2,p_item_images3,status,db)
 		if (ins_item_detail == 'SUCCESS'):
 			return {'status': 'SUCCESS', 'data': 'Insert Item Detail Success'}
 		else:
@@ -262,7 +262,6 @@ async def ins_item_detail(p_item_code:str,p_item_name:str,p_item_desc:str,p_item
 	except:
 		return {'status': 'ERROR', 'data': 'Something Went Wrong'}
 
-ins_item_detail
 
 #######################################################################  TRANSACTION  ###############################################################################
 
