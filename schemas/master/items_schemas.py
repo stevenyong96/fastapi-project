@@ -9,12 +9,13 @@ class Items(BaseModel):
 	item_code: str
 	item_name: str
 	item_desc: str
-    item_price: int
-    item_stock: int
-    item_images1 : Optional[str] = 'https://github.com/stevenyong96/fastapi-project/images/no_images_available.png'
-    item_images2 : Optional[str] = 'https://github.com/stevenyong96/fastapi-project/images/no_images_available.png' 
-    item_images3 : Optional[str] = 'https://github.com/stevenyong96/fastapi-project/images/no_images_available.png'
-    status : Optional[str] = 0
+	item_price: int
+	item_stock: int
+	item_color: str
+	item_images1 : Optional[str] = 'https://raw.githubusercontent.com/stevenyong96/fastapi-project/master/images/no_images_available.png'
+	item_images2 : Optional[str] = 'https://raw.githubusercontent.com/stevenyong96/fastapi-project/master/images/no_images_available.png' 
+	item_images3 : Optional[str] = 'https://raw.githubusercontent.com/stevenyong96/fastapi-project/master/images/no_images_available.png'
+	status : Optional[int] = 0
 	
 	# class Config:
 	# 	orm_mode=True
@@ -60,7 +61,7 @@ class Items(BaseModel):
 # 	class Config:
 # 		orm_mode = True
 # 		arbitrary_types_allowed = True
-    
+	
 
 # class S_ART_ATTRIB_HDR(BaseModel):
 # 	item_code = str

@@ -28,6 +28,8 @@ from models.master.items_models import Base
 ###SCHEMAS###
 from schemas.auth.auth_schemas import *
 from schemas.auth.auth_schemas import BaseModel
+from schemas.master.items_schemas import *
+from schemas.master.items_schemas import BaseModel
 
 ###CRUD###
 from controllers.auth.auth_crud import *
@@ -248,19 +250,27 @@ async def item_detail(p_item_code:str,db: Session = Depends(Connection.get_db)):
 	except:
 		return {'status': 'ERROR', 'data': 'Something Went Wrong'}
 
-@app.post("/item/ins/{p_item_code}/{p_item_name}/{p_item_desc}/{p_item_price}/{p_item_stock}/{p_item_color}/{p_item_images1}/{p_item_images2}/{p_item_images3}/{status}", tags=["Master_Items"])
-async def ins_item_detail(p_item_code:str,p_item_name:str,p_item_desc:str,p_item_price:int,p_item_stock:int,p_item_color:str,p_item_images1:str,p_item_images2:str,p_item_images3:str,p_status:int,db: Session = Depends(Connection.get_db)):
+@app.post("/item/ins/", tags=["Master_Items"])
+async def ins_item_detail(item : Items,db: Session = Depends(Connection.get_db)):
 
-	try:
-		if db is None:
-			raise HTTPException(status_code=404, detail="Connection Failed")
-		ins_item_detail = ItemsCrud.ins_item_detail(p_item_code,p_item_name,p_item_desc,p_item_price,p_item_stock,p_item_color,p_item_images1,p_item_images2,p_item_images3,status,db)
-		if (ins_item_detail == 'SUCCESS'):
-			return {'status': 'SUCCESS', 'data': 'Insert Item Detail Success'}
-		else:
-			return {'status': 'ERROR', 'data': 'Insert Items Detail Not Found'}	
-	except:
-		return {'status': 'ERROR', 'data': 'Something Went Wrong'}
+	if db is None:
+		raise HTTPException(status_code=404, detail="Connection Failed")
+	ins_item_detail = ItemsCrud.ins_item_detail(item.item_code,item.item_name,item.item_desc,item.item_price,item.item_stock,item.item_color,item.item_images1,item.item_images2,item.item_images3,item.status,db)
+	if (ins_item_detail == 'SUCCESS'):
+		return {'status': 'SUCCESS', 'data': 'Insert Item Detail Success'}
+	else:
+		return {'status': 'ERROR', 'data': 'Insert Items Detail Not Found'}	
+
+	# try:
+	# 	if db is None:
+	# 		raise HTTPException(status_code=404, detail="Connection Failed")
+	# 	ins_item_detail = ItemsCrud.ins_item_detail(p_item_code,p_item_name,p_item_desc,p_item_price,p_item_stock,p_item_color,p_item_images1,p_item_images2,p_item_images3,status,db)
+	# 	if (ins_item_detail == 'SUCCESS'):
+	# 		return {'status': 'SUCCESS', 'data': 'Insert Item Detail Success'}
+	# 	else:
+	# 		return {'status': 'ERROR', 'data': 'Insert Items Detail Not Found'}	
+	# except:
+	# 	return {'status': 'ERROR', 'data': 'Something Went Wrong'}
 
 
 #######################################################################  TRANSACTION  ###############################################################################
