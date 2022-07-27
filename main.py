@@ -272,6 +272,20 @@ async def item_search(p_search:str,db: Session = Depends(Connection.get_db)):
 			raise HTTPException(status_code=404, detail="Connection Failed")
 		get_item_search = ItemsCrud.get_item_search(p_search,db)
 		if len(get_item_search) > 0:
+			return get_item_search
+		else:
+			return {'status': 'ERROR', 'data': 'Get Items Search Not Found'}	
+	except:
+		return {'status': 'ERROR', 'data': 'Something Went Wrong'}
+
+@app.get("/items/search2/{p_search}", tags=["Master_Items"])
+async def item_search2(p_search:str,db: Session = Depends(Connection.get_db)):
+
+	try:
+		if db is None:
+			raise HTTPException(status_code=404, detail="Connection Failed")
+		get_item_search = ItemsCrud.get_item_search(p_search,db)
+		if len(get_item_search) > 0:
 			return {'status': 'SUCCESS', 'data': get_item_search}
 		else:
 			return {'status': 'ERROR', 'data': 'Get Items Search Not Found'}	
