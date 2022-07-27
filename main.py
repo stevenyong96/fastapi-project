@@ -230,6 +230,20 @@ async def list_items(db: Session = Depends(Connection.get_db)):
 			raise HTTPException(status_code=404, detail="Connection Failed")
 		get_list_items = ItemsCrud.get_list_items(db)
 		if len(get_list_items) > 0 :
+			return get_list_items
+		else:
+			return {'status': 'ERROR', 'data': 'Get List Items Not Found'}	
+	except:
+		return {'status': 'ERROR', 'data': 'Something Went Wrong'}
+
+@app.get("/list_items2", tags=["Master_Items"])
+async def list_items2(db: Session = Depends(Connection.get_db)):
+
+	try:
+		if db is None:
+			raise HTTPException(status_code=404, detail="Connection Failed")
+		get_list_items = ItemsCrud.get_list_items(db)
+		if len(get_list_items) > 0 :
 			return {'status': 'SUCCESS', 'data': get_list_items}
 		else:
 			return {'status': 'ERROR', 'data': 'Get List Items Not Found'}	
@@ -253,24 +267,16 @@ async def item_detail(p_item_code:str,db: Session = Depends(Connection.get_db)):
 @app.get("/items/search/{p_search}", tags=["Master_Items"])
 async def item_search(p_search:str,db: Session = Depends(Connection.get_db)):
 
-	if db is None:
-		raise HTTPException(status_code=404, detail="Connection Failed")
-	get_item_search = ItemsCrud.get_item_search(p_search,db)
-	if len(get_item_search) > 0:
-		return {'status': 'SUCCESS', 'data': get_item_search}
-	else:
-		return {'status': 'ERROR', 'data': 'Get Items Search Not Found'}	
-
-	# try:
-	# 	if db is None:
-	# 		raise HTTPException(status_code=404, detail="Connection Failed")
-	# 	get_item_search = ItemsCrud.get_item_search(p_search,db)
-	# 	if len(get_item_search) > 0:
-	# 		return {'status': 'SUCCESS', 'data': get_item_search}
-	# 	else:
-	# 		return {'status': 'ERROR', 'data': 'Get Items Search Not Found'}	
-	# except:
-	# 	return {'status': 'ERROR', 'data': 'Something Went Wrong'}
+	try:
+		if db is None:
+			raise HTTPException(status_code=404, detail="Connection Failed")
+		get_item_search = ItemsCrud.get_item_search(p_search,db)
+		if len(get_item_search) > 0:
+			return {'status': 'SUCCESS', 'data': get_item_search}
+		else:
+			return {'status': 'ERROR', 'data': 'Get Items Search Not Found'}	
+	except:
+		return {'status': 'ERROR', 'data': 'Something Went Wrong'}
 
 @app.post("/item/ins/", tags=["Master_Items"])
 async def ins_item_detail(item : Items,db: Session = Depends(Connection.get_db)):
